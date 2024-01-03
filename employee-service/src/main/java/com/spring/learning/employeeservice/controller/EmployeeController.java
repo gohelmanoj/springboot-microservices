@@ -1,5 +1,6 @@
 package com.spring.learning.employeeservice.controller;
 
+import com.spring.learning.employeeservice.dto.APIResponse;
 import com.spring.learning.employeeservice.dto.EmployeeDto;
 import com.spring.learning.employeeservice.service.EmployeeService;
 import lombok.AllArgsConstructor;
@@ -17,12 +18,12 @@ public class EmployeeController {
     EmployeeService employeeService;
 
     @GetMapping
-    public ResponseEntity<List<EmployeeDto>> getAllEmployee() {
+    public ResponseEntity<List<APIResponse>> getAllEmployee() {
         return new ResponseEntity<>(employeeService.getAllEmployee(), HttpStatus.OK);
     }
 
     @GetMapping("{email}")
-    public ResponseEntity<EmployeeDto> getEmployeeByEmail(@PathVariable("email") String email) {
+    public ResponseEntity<APIResponse> getEmployeeByEmail(@PathVariable("email") String email) {
         return new ResponseEntity<>(employeeService.getEmployeeByEmail(email), HttpStatus.OK);
     }
 

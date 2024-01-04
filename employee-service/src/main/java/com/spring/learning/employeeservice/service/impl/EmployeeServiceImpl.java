@@ -39,7 +39,8 @@ public class EmployeeServiceImpl implements EmployeeService {
             if (employee.getDepartmentCode() == null || employee.getDepartmentCode().isEmpty()) {
                 departmentDto = new DepartmentDto();
             } else {
-                departmentDto = getDepartmentByDepartmentCode(employee.getDepartmentCode());
+                //departmentDto = getDepartmentByDepartmentCode(employee.getDepartmentCode());
+                departmentDto = apiClient.getDepartmentByDepartmentCode(employee.getDepartmentCode());
             }
             EmployeeDto employeeDto = modelMapper.map(employee, EmployeeDto.class);
             return new APIResponse(employeeDto, departmentDto);

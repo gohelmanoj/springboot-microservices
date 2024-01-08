@@ -9,6 +9,7 @@ import com.spring.learning.employeeservice.exception.ResourceNotFoundException;
 import com.spring.learning.employeeservice.repository.EmployeeRepository;
 import com.spring.learning.employeeservice.service.APIClient;
 import com.spring.learning.employeeservice.service.EmployeeService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     private APIClient apiClient;
 
     @Override
+    @CircuitBreaker(name="${spring.application.name}", fallbackMethod="getDefaultDepartment")
     public List<APIResponse> getAllEmployee() {
         List<Employee> employees = employeeRepository.findAll();
 
@@ -39,8 +41,8 @@ public class EmployeeServiceImpl implements EmployeeService {
             if (employee.getDepartmentCode() == null || employee.getDepartmentCode().isEmpty()) {
                 departmentDto = new DepartmentDto();
             } else {
-                //departmentDto = getDepartmentByDepartmentCode(employee.getDepartmentCode());
-                departmentDto = apiClient.getDepartmentByDepartmentCode(employee.getDepartmentCode());
+                departmentDto = getDepartmentByDepartmentCode(employee.getDepartmentCode());
+                //departmentDto = apiClient.getDepartmentByDepartmentCode(employee.getDepartmentCode());
             }
             EmployeeDto employeeDto = modelMapper.map(employee, EmployeeDto.class);
             return new APIResponse(employeeDto, departmentDto);
@@ -113,5 +115,22 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .retrieve()
                 .bodyToMono(DepartmentDto.class)
                 .block();
+    }
+
+
+    public List<APIResponse> getDefaultDepartment(Exception exception) {
+
+        List<Employee> employees = employeeRepository.findAll();
+
+        return employees.stream().map(employee -> {
+
+            DepartmentDto departmentDto = new DepartmentDto();
+            departmentDto.setCode("RD001");
+            departmentDto.setName("R&D");
+            departmentDto.setDescription("Research and Development Department");
+
+            EmployeeDto employeeDto = modelMapper.map(employee, EmployeeDto.class);
+            return new APIResponse(employeeDto, departmentDto);
+        }).toList();
     }
 }

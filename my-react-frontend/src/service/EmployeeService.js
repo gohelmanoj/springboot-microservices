@@ -10,4 +10,5 @@ class EmployeeService {
     }
 }
 
-export default new EmployeeService
+const exportedObject =  new EmployeeService();
+export default exportedObject

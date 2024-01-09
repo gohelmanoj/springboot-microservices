@@ -19,6 +19,10 @@ class EmployeeComponent extends Component {
             this.setState({employee : response.data.employee})
             this.setState({department: response.data.department})
             this.setState({organization: response.data.organization})
+
+            console.log(this.state.employee)
+            console.log(this.state.department)
+            console.log(this.state.organization)
         })
     }
 
@@ -55,13 +59,13 @@ class EmployeeComponent extends Component {
                     <h3 className='text-center card-header'>Organization Detail</h3>
                     <div className='card-body'>
                         <div className='row'>
-                            <p><strong>Name: </strong>{this.state.department.name}</p>
+                            <p><strong>Name: </strong>{this.state.organization.name}</p>
                         </div>
                         <div className='row'>
-                            <p><strong>Description: </strong>{this.state.department.description}</p>
+                            <p><strong>Description: </strong>{this.state.organization.description}</p>
                         </div>
                         <div className='row'>
-                            <p><strong>Code: </strong>{this.state.department.code}</p>
+                            <p><strong>Code: </strong>{this.state.organization.code}</p>
                         </div>
                     </div>
                 </div>
@@ -69,8 +73,5 @@ class EmployeeComponent extends Component {
         );
     }
 }
-
-
-
 
 export default EmployeeComponent;
